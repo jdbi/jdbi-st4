@@ -92,6 +92,25 @@ public class DaoTest {
         assertThat(name).isEqualTo("Kyle");
     }
 
+    @Test
+    public void testLocatorOnMethod() throws Exception {
+        final DBI dbi = new DBI(this.h2.getDataSource());
+        final InnerDao dao = dbi.onDemand(InnerDao.class);
+        final OnMethod om = dbi.onDemand(OnMethod.class);
+
+        dao.createSomething();
+        om.insertVivek();
+
+        final String name = dao.findNameById(3);
+        assertThat(name).isEqualTo("Vivek");
+    }
+
+    public interface OnMethod {
+
+        @SqlUpdate
+        @UseST4StatementLocator
+        public void insertVivek();
+    }
 
     @UseST4StatementLocator
     public interface InnerDao {
