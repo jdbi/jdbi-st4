@@ -8,8 +8,8 @@
         <version>13</version>
     </parent>
 
-    <groupId>org.skife.jdbi</groupId>
-    <artifactId>jdbi-st4</artifactId>
+    <groupId>com.groupon.jdbi</groupId>
+    <agrtifactId>jdbi-st4</agrtifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
