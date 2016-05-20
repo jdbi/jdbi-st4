@@ -47,6 +47,7 @@ public class ST4StatementLocator implements StatementLocator {
 
         final URL url = sqlObjectType.getResource(className + ".sql.stg");
         final STGroup group = new STGroupFile(url, "UTF-8", '<', '>');
+        groups.putIfAbsent(sqlObjectType, group);
         return new ST4StatementLocator(group);
     }
 }
