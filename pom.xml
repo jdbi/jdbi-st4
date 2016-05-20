@@ -9,7 +9,7 @@
     </parent>
 
     <groupId>com.groupon.jdbi</groupId>
-    <agrtifactId>jdbi-st4</agrtifactId>
+    <artifactId>jdbi-st4</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -44,6 +44,12 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.191</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

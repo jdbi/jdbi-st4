@@ -82,6 +82,16 @@ public class DaoTest {
 
     }
 
+    @Test
+    public void testSqlLiteral() throws Exception {
+        final DBI dbi = new DBI(this.h2.getDataSource());
+        final InnerDao dao = dbi.onDemand(InnerDao.class);
+        dao.createSomething();
+        dao.insert("something", 1, "Kyle");
+        final String name = dao.findNameById(1);
+        assertThat(name).isEqualTo("Kyle");
+    }
+
 
     @UseST4StatementLocator
     public interface InnerDao {
@@ -95,54 +105,9 @@ public class DaoTest {
         @SqlQuery
         @MapResultAsBean
         Something findById(@Bind("id") int id);
+
+        @SqlQuery("select name from something where id = :id")
+        String findNameById(@Bind("id") int id);
     }
 
-    public static class Something {
-        private int id;
-        private String name;
-
-        public Something(final int id, final String name) {
-            this.id = id;
-            this.name = name;
-        }
-
-        public Something() {
-            // for bean mappery
-        }
-
-        public void setId(final int id) {
-            this.id = id;
-        }
-
-        public void setName(final String name) {
-            this.name = name;
-        }
-
-        public int getId() {
-            return this.id;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            final Something something = (Something) o;
-
-            if (this.id != something.id) return false;
-            return this.name != null ? this.name.equals(something.name) : something.name == null;
-
-        }
-
-        @Override
-        public int hashCode() {
-            int result = this.id;
-            result = 31 * result + (this.name != null ? this.name.hashCode() : 0);
-            return result;
-        }
-    }
 }

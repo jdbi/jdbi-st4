@@ -17,5 +17,5 @@ public interface OuterDao {
 
     @SqlQuery
     @MapResultAsBean
-    DaoTest.Something findById2(@Bind("id") int id);
+    Something findById2(@Bind("id") int id);
 }
