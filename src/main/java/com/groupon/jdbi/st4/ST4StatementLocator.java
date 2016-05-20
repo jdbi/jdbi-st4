@@ -40,6 +40,7 @@ public class ST4StatementLocator implements StatementLocator {
             return new ST4StatementLocator(groups.get(sqlObjectType));
         }
 
+        // handle naming of inner classes as Outer.Inner.sql.stg instead of Outer$Inner.sql.stg
         final String fullName = sqlObjectType.getName();
         final String pkg = sqlObjectType.getPackage().getName();
         final String className = fullName.substring(pkg.length() + 1, fullName.length())
