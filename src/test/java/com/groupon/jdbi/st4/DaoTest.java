@@ -20,17 +20,17 @@ public class DaoTest {
     @Test
     public void testSimpleStatement() throws Exception {
         final DBI dbi = new DBI(this.h2.getDataSource());
-        final Dao dao = dbi.onDemand(Dao.class);
-        dao.createSomething();
+        final OuterDao dao = dbi.onDemand(OuterDao.class);
+        dao.createSomething2();
         dbi.useHandle((h) -> h.execute("insert into something (id, name) values (1, 'Kyle')"));
     }
 
     @Test
     public void testDefineSomething() throws Exception {
         final DBI dbi = new DBI(this.h2.getDataSource());
-        final Dao dao = dbi.onDemand(Dao.class);
-        dao.createSomething();
-        dao.insert("something", 1, "Carlos");
+        final OuterDao dao = dbi.onDemand(OuterDao.class);
+        dao.createSomething2();
+        dao.insert2("something", 1, "Carlos");
 
         final String name = dbi.withHandle((h) -> h.createQuery("select name from something where id = 1")
                                                    .map(StringColumnMapper.INSTANCE)
@@ -41,7 +41,39 @@ public class DaoTest {
     @Test
     public void testUseImportedTemplate() throws Exception {
         final DBI dbi = new DBI(this.h2.getDataSource());
-        final Dao dao = dbi.onDemand(Dao.class);
+        final OuterDao dao = dbi.onDemand(OuterDao.class);
+        dao.createSomething2();
+        dao.insert2("something", 1, "Paul");
+        final Something s = dao.findById2(1);
+
+        assertThat(s).isEqualTo(new Something(1, "Paul"));
+    }
+
+    @Test
+    public void testSimpleStatementInnerClass() throws Exception {
+        final DBI dbi = new DBI(this.h2.getDataSource());
+        final InnerDao dao = dbi.onDemand(InnerDao.class);
+        dao.createSomething();
+        dbi.useHandle((h) -> h.execute("insert into something (id, name) values (1, 'Kyle')"));
+    }
+
+    @Test
+    public void testDefineSomethingInnerClass() throws Exception {
+        final DBI dbi = new DBI(this.h2.getDataSource());
+        final InnerDao dao = dbi.onDemand(InnerDao.class);
+        dao.createSomething();
+        dao.insert("something", 1, "Carlos");
+
+        final String name = dbi.withHandle((h) -> h.createQuery("select name from something where id = 1")
+                                                   .map(StringColumnMapper.INSTANCE)
+                                                   .first());
+        assertThat(name).isEqualTo("Carlos");
+    }
+
+    @Test
+    public void testUseImportedTemplateInnerClass() throws Exception {
+        final DBI dbi = new DBI(this.h2.getDataSource());
+        final InnerDao dao = dbi.onDemand(InnerDao.class);
         dao.createSomething();
         dao.insert("something", 1, "Paul");
         final Something s = dao.findById(1);
@@ -50,8 +82,9 @@ public class DaoTest {
 
     }
 
+
     @UseST4StatementLocator
-    public interface Dao {
+    public interface InnerDao {
 
         @SqlUpdate
         void createSomething();
