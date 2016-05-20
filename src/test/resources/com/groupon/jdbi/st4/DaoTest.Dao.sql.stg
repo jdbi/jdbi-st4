@@ -1,0 +1,6 @@
+
+import "lib/shared.stg"
+
+createSomething() ::= <<create table something (id int primary key, name text)>>
+insertSomething() ::= <<insert into something (<something_fields()>) values (:id, :name)>>
+findNameById() ::= <<select name from something where id = :id>>
