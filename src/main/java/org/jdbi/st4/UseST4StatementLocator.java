@@ -1,4 +1,4 @@
-package com.groupon.jdbi.st4;
+package org.jdbi.st4;
 
 import org.skife.jdbi.v2.sqlobject.SqlStatementCustomizer;
 import org.skife.jdbi.v2.sqlobject.SqlStatementCustomizerFactory;

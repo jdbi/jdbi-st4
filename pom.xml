@@ -3,18 +3,44 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.groupon.jtier</groupId>
-        <artifactId>jtier-basepom</artifactId>
-        <version>13</version>
+        <groupId>org.basepom</groupId>
+        <artifactId>basepom-standard-oss</artifactId>
+        <version>14</version>
     </parent>
 
-    <groupId>com.groupon.jdbi</groupId>
+    <groupId>org.jdbi</groupId>
     <artifactId>jdbi-st4</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <description>
+        Load SQL statements from StringTemplate template groups.
+    </description>
 
     <name>StringTemplate4 JDBI SQL Loader</name>
-    <url>https://github.groupondev.com/brianm/jdbi-st4</url>
+    <url>https://github.com/jdbi/jdbi-st4</url>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/jdbi/jdbi-st4.git</connection>
+        <developerConnection>scm:git:git@github.com:jdbi/jdbi-st4.git</developerConnection>
+        <url>https://github.com/jdbi/jdbi-st4/</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>brianm</id>
+            <name>Brian McCallister</name>
+            <email>brianm@skife.org</email>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>

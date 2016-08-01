@@ -1,4 +1,4 @@
-package com.groupon.jdbi.st4;
+package org.jdbi.st4;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

@@ -1,4 +1,4 @@
-package com.groupon.jdbi.st4;
+package org.jdbi.st4;
 
 import org.junit.Test;
 import org.stringtemplate.v4.ST;
