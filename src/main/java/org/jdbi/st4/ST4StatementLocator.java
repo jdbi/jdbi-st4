@@ -23,22 +23,33 @@ import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
 
 public class ST4StatementLocator implements StatementLocator {
 
-    private final STGroup group;
     private static final ConcurrentMap<Class, STGroup> groups = new ConcurrentHashMap<>();
 
+    private final Function<StatementContext, STGroup> group;
+
     public ST4StatementLocator(final STGroup group) {
-        this.group = group;
+        this((_ctx) -> group);
+    }
+
+    public ST4StatementLocator(final Function<StatementContext, STGroup> groupProvider) {
+        this.group = groupProvider;
     }
 
     @Override
     public String locate(final String name, final StatementContext ctx) throws Exception {
-        ST st = this.group.getInstanceOf(name);
+        ST st = this.group.apply(ctx).getInstanceOf(name);
         if (st == null) {
             st = new ST(name);
         }
+
+        // we add all context values, ST4 explodes if you add a value that lacks a formal argument,
+        // iff hasFormalArgs is true. If it is false, it just uses values opportunistically. This is gross
+        // but works :-( -brianm
+        st.impl.hasFormalArgs = false;
 
         for (final Map.Entry<String, Object> attr : ctx.getAttributes().entrySet()) {
             st.add(attr.getKey(), attr.getValue());
@@ -48,7 +59,6 @@ public class ST4StatementLocator implements StatementLocator {
     }
 
     public static StatementLocator instance(final Class sqlObjectType) {
-
         if (groups.containsKey(sqlObjectType)) {
             return new ST4StatementLocator(groups.get(sqlObjectType));
         }
@@ -58,7 +68,6 @@ public class ST4StatementLocator implements StatementLocator {
         final String pkg = sqlObjectType.getPackage().getName();
         final String className = fullName.substring(pkg.length() + 1, fullName.length())
                                          .replace('$', '.');
-
         final URL url = sqlObjectType.getResource(className + ".sql.stg");
         final STGroup group = new STGroupFile(url, "UTF-8", '<', '>');
         final STGroup assoc = groups.putIfAbsent(sqlObjectType, group);
