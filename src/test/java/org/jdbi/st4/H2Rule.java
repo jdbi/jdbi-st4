@@ -16,13 +16,14 @@ package org.jdbi.st4;
 
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.rules.ExternalResource;
+import org.skife.jdbi.v2.tweak.ConnectionFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class H2Rule extends ExternalResource {
+public class H2Rule extends ExternalResource implements ConnectionFactory {
     private Connection     conn;
     private JdbcDataSource pool;
 
@@ -51,5 +52,10 @@ public class H2Rule extends ExternalResource {
         this.pool.setPassword("h2");
 
         this.conn = this.pool.getConnection();
+    }
+
+    @Override
+    public Connection openConnection() throws SQLException {
+        return pool.getConnection();
     }
 }

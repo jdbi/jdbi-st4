@@ -32,7 +32,7 @@ public class DaoTest {
 
     @Test
     public void testSimpleStatement() throws Exception {
-        final DBI dbi = new DBI(this.h2.getDataSource());
+        final DBI dbi = new DBI(h2);
         final OuterDao dao = dbi.onDemand(OuterDao.class);
         dao.createSomething2();
         dbi.useHandle((h) -> h.execute("insert into something (id, name) values (1, 'Kyle')"));
@@ -40,7 +40,7 @@ public class DaoTest {
 
     @Test
     public void testDefineSomething() throws Exception {
-        final DBI dbi = new DBI(this.h2.getDataSource());
+        final DBI dbi = new DBI(h2);
         final OuterDao dao = dbi.onDemand(OuterDao.class);
         dao.createSomething2();
         dao.insert2("something", 1, "Carlos");
@@ -53,7 +53,7 @@ public class DaoTest {
 
     @Test
     public void testUseImportedTemplate() throws Exception {
-        final DBI dbi = new DBI(this.h2.getDataSource());
+        final DBI dbi = new DBI(h2);
         final OuterDao dao = dbi.onDemand(OuterDao.class);
         dao.createSomething2();
         dao.insert2("something", 1, "Paul");
@@ -64,7 +64,7 @@ public class DaoTest {
 
     @Test
     public void testSimpleStatementInnerClass() throws Exception {
-        final DBI dbi = new DBI(this.h2.getDataSource());
+        final DBI dbi = new DBI(h2);
         final InnerDao dao = dbi.onDemand(InnerDao.class);
         dao.createSomething();
         dbi.useHandle((h) -> h.execute("insert into something (id, name) values (1, 'Kyle')"));
@@ -72,7 +72,7 @@ public class DaoTest {
 
     @Test
     public void testDefineSomethingInnerClass() throws Exception {
-        final DBI dbi = new DBI(this.h2.getDataSource());
+        final DBI dbi = new DBI(h2);
         final InnerDao dao = dbi.onDemand(InnerDao.class);
         dao.createSomething();
         dao.insert("something", 1, "Carlos");
@@ -85,7 +85,7 @@ public class DaoTest {
 
     @Test
     public void testUseImportedTemplateInnerClass() throws Exception {
-        final DBI dbi = new DBI(this.h2.getDataSource());
+        final DBI dbi = new DBI(h2);
         final InnerDao dao = dbi.onDemand(InnerDao.class);
         dao.createSomething();
         dao.insert("something", 1, "Paul");
@@ -97,7 +97,7 @@ public class DaoTest {
 
     @Test
     public void testSqlLiteral() throws Exception {
-        final DBI dbi = new DBI(this.h2.getDataSource());
+        final DBI dbi = new DBI(h2);
         final InnerDao dao = dbi.onDemand(InnerDao.class);
         dao.createSomething();
         dao.insert("something", 1, "Kyle");
@@ -107,7 +107,7 @@ public class DaoTest {
 
     @Test
     public void testLocatorOnMethod() throws Exception {
-        final DBI dbi = new DBI(this.h2.getDataSource());
+        final DBI dbi = new DBI(h2);
         final InnerDao dao = dbi.onDemand(InnerDao.class);
         final OnMethod om = dbi.onDemand(OnMethod.class);
 
