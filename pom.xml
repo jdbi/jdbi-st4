@@ -22,7 +22,7 @@
 
     <groupId>org.jdbi.v2</groupId>
     <artifactId>jdbi-st4</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>
         Load SQL statements from StringTemplate template groups.
@@ -43,7 +43,7 @@
         <connection>scm:git:git://github.com/jdbi/jdbi-st4.git</connection>
         <developerConnection>scm:git:git@github.com:jdbi/jdbi-st4.git</developerConnection>
         <url>https://github.com/jdbi/jdbi-st4/</url>
-      <tag>jdbi-st4-0.2.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <developers>
