@@ -19,6 +19,7 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +28,7 @@ import java.util.function.Function;
 
 public class ST4StatementLocator implements StatementLocator {
 
-    private static final ConcurrentMap<URL, STGroup> CACHE = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, STGroup> CACHE = new ConcurrentHashMap<>();
 
     private final Function<StatementContext, STGroup> group;
 
@@ -106,10 +107,10 @@ public class ST4StatementLocator implements StatementLocator {
     public static StatementLocator forURL(UseSTGroupCache useCache, URL url) {
         final STGroup stg;
         if (useCache == UseSTGroupCache.YES) {
-            stg = CACHE.computeIfAbsent(url, ST4StatementLocator::urlToSTGroup);
+            stg = CACHE.computeIfAbsent(url.toString(), ST4StatementLocator::urlToSTGroup);
         }
         else {
-            stg = urlToSTGroup(url);
+            stg = urlToSTGroup(url.toString());
         }
 
         return new ST4StatementLocator(stg);
@@ -128,7 +129,11 @@ public class ST4StatementLocator implements StatementLocator {
         return c.getResource(className + ".sql.stg");
     }
 
-    private static STGroup urlToSTGroup(URL u) {
-        return new STGroupFile(u, "UTF-8", '<', '>');
+    private static STGroup urlToSTGroup(String u) {
+        try {
+            return new STGroupFile(new URL(u) , "UTF-8", '<', '>');
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException("a URL failed to roundtrip from a string!", e);
+        }
     }
 }

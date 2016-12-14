@@ -18,7 +18,7 @@ public class ExampleTest {
     @Test
     public void testFluent() throws Exception {
         DBI dbi = new DBI(h2);
-        dbi.setStatementLocator(ST4StatementLocator.fromClasspath("/org/jdbi/st4/ExampleTest.Dao.sql.stg"));
+        dbi.setStatementLocator(ST4StatementLocator.fromClasspath("/org/jdbi/v2/st4/ExampleTest.Dao.sql.stg"));
 
         dbi.useHandle((h) -> {
             h.execute("createSomethingTable");

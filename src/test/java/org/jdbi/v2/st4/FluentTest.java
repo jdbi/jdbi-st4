@@ -28,7 +28,7 @@ public class FluentTest {
     @Test
     public void testFoo() throws Exception {
         final DBI dbi = new DBI(this.h2.getDataSource());
-        dbi.setStatementLocator(new ST4StatementLocator(new STGroupFile("org/jdbi/st4/DaoTest.InnerDao.sql.stg")));
+        dbi.setStatementLocator(new ST4StatementLocator(new STGroupFile("org/jdbi/v2/st4/DaoTest.InnerDao.sql.stg")));
         dbi.useHandle((h) -> {
             h.execute("createSomething");
             h.createStatement("insert")
