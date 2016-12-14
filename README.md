@@ -11,7 +11,7 @@ Provides an easy way to externalize SQL statements for JDBI in
 This library is typically used to externalize SQL into StringTemplate Group Files. Take the following example Dao:
 
 ```java
-package org.jdbi.st4;
+package org.jdbi.v2.st4;
 
 @UseST4StatementLocator
 public interface Dao {

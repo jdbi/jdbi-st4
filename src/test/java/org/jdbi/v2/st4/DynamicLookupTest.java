@@ -1,4 +1,4 @@
-package org.jdbi.st4;
+package org.jdbi.v2.st4;
 
 import org.junit.Rule;
 import org.junit.Test;
