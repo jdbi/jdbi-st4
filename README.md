@@ -1,10 +1,23 @@
 # JDBI-ST4
 
-Provides an easy way to externalize SQL statements for JDBI in
+Provides an easy way to externalize SQL statements for JDBI (2.x) in
 [StringTemplate 4](https://github.com/antlr/stringtemplate4) [StringTemplate Group Files](https://github.com/antlr/stringtemplate4/blob/master/doc/groups.md).
 
 # Usage
 
+## Getting It
+
+Use Maven:
+
+```xml
+<dependency>
+  <groupId>org.jdbi.v2</groupId>
+  <artifactId>jdbi-st4</artifactId>
+  <version>...</version>
+</dependency>
+```
+
+Latest version can be found [by searching](http://search.maven.org/#search%7Cga%7C1%7Cjdbi-st4).
 
 ## SQL Object API 
 
