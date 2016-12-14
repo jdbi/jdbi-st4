@@ -33,7 +33,7 @@ public interface Dao {
 
 The `@UseST4StatementLocator` annotation tells JDBI to use the `ST4StatementLocator` for this object. By default, it
 looks for a stringtemplate group file on the classpath at `/com/example/Dao.sql.stg`. Basically, it looks for 
-`<ClassName>.sql.stg` in the same package as `<ClassName>`. With a maven project, you'd achieve this by putting.
+`<ClassName>.sql.stg` in the same package as `<ClassName>`. With a maven project, you'd achieve this by putting it in `src/main/resources/com/example/<ClassName>.sq.stg`.
  
 If we look at the stringtemplate group file:
 
