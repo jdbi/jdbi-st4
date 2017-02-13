@@ -61,7 +61,7 @@ public class ST4StatementLocator implements StatementLocator {
     }
 
     /**
-     * Obtains a locator based on a classpath path, using a glogal template group CACHE.
+     * Obtains a locator based on a classpath path, using a global template group CACHE.
      */
     public static StatementLocator fromClasspath(String path) {
         return fromClasspath(UseSTGroupCache.YES, path);
@@ -78,7 +78,7 @@ public class ST4StatementLocator implements StatementLocator {
     }
 
     /**
-     * Obtains a locator based on the type passed in, using a glogal template group CACHE.
+     * Obtains a locator based on the type passed in, using a global template group CACHE.
      * <p>
      * STGroup is loaded from the classpath via sqlObjectType.getResource( ), such that names line
      * up with the package and class, so: com.example.Foo will look for /com/example/Foo.sql.stg . Inner classes
@@ -116,6 +116,74 @@ public class ST4StatementLocator implements StatementLocator {
         return new ST4StatementLocator(stg);
     }
 
+    /**
+     * Create a statement locator intended for setting on a DBI or Handle instance which will
+     * lookup a template group to use based on the name of the sql object type for a particular query, using
+     * the same logic as {@link UseST4StatementLocator}.
+     */
+    public static StatementLocator perType(UseSTGroupCache useCache) {
+        return perType(useCache, new STGroup('<', '>'));
+    }
+
+    /**
+     * Create a statement locator intended for setting on a DBI or Handle instance which will
+     * lookup a template group to use based on the name of the sql object type for a particular query, using
+     * the same logic as {@link UseST4StatementLocator}.
+     * <p>
+     * Supports a fallback template group for statements created not using a sql object.
+     */
+    public static StatementLocator perType(UseSTGroupCache useCache, String fallbackTemplateGroupPath) {
+        return perType(useCache, ST4StatementLocator.class.getResource(fallbackTemplateGroupPath));
+    }
+
+    /**
+     * Create a statement locator intended for setting on a DBI or Handle instance which will
+     * lookup a template group to use based on the name of the sql object type for a particular query, using
+     * the same logic as {@link UseST4StatementLocator}.
+     * <p>
+     * Supports a fallback template group for statements created not using a sql object.
+     */
+    public static StatementLocator perType(UseSTGroupCache useCache, URL baseTemplate) {
+        return perType(useCache, urlToSTGroup(baseTemplate));
+    }
+
+    /**
+     * Create a statement locator intended for setting on a DBI or Handle instance which will
+     * lookup a template group to use based on the name of the sql object type for a particular query, using
+     * the same logic as {@link UseST4StatementLocator}.
+     * <p>
+     * Supports a fallback template group for statements created not using a sql object.
+     */
+    public static StatementLocator perType(UseSTGroupCache useCache, STGroup fallbackTemplateGroup) {
+        final StatementLocator fallback = new ST4StatementLocator(fallbackTemplateGroup);
+
+        if (useCache == UseSTGroupCache.YES) {
+            final ConcurrentMap<Class<?>, StatementLocator> sqlObjectCache = new ConcurrentHashMap<>();
+            return (name, ctx) -> {
+                if (ctx.getSqlObjectType() != null) {
+                    StatementLocator sl = sqlObjectCache.computeIfAbsent(ctx.getSqlObjectType(), (c) -> {
+                        return ST4StatementLocator.forType(useCache, ctx.getSqlObjectType());
+                    });
+                    return sl.locate(name, ctx);
+                }
+                else {
+                    return fallback.locate(name, ctx);
+                }
+            };
+        }
+        else {
+            // if we are not caching, let's not cache the lookup of the template group either!
+            return (name, ctx) -> {
+                if (ctx.getSqlObjectType() != null) {
+                    return ST4StatementLocator.forType(useCache, ctx.getSqlObjectType()).locate(name, ctx);
+                }
+                else {
+                    return fallback.locate(name, ctx);
+                }
+            };
+        }
+    }
+
 
     public enum UseSTGroupCache {
         YES, NO
@@ -131,9 +199,14 @@ public class ST4StatementLocator implements StatementLocator {
 
     private static STGroup urlToSTGroup(String u) {
         try {
-            return new STGroupFile(new URL(u) , "UTF-8", '<', '>');
+            return urlToSTGroup(new URL(u));
         } catch (MalformedURLException e) {
             throw new IllegalStateException("a URL failed to roundtrip from a string!", e);
         }
+    }
+
+    private static STGroup urlToSTGroup(URL u) {
+        return new STGroupFile(u, "UTF-8", '<', '>');
+
     }
 }
